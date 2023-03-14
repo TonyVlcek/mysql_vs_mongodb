@@ -1,0 +1,42 @@
+# ======================================
+# Nette ================================
+php:
+	date.timezone: Europe/Berlin
+
+tracy:
+	email: %project.error.email%
+	strictMode: yes
+
+# ======================================
+# Default parameters ===================
+
+parameters:
+	project:
+		error:
+			email: tony@vlcek.dev
+	target: null
+
+# ======================================
+# Default extensions ===================
+extensions:
+	resources: Contributte\DI\Extension\ResourceExtension
+	console: Contributte\Console\DI\ConsoleExtension(%consoleMode%)
+
+resources:
+	resources:
+		App\Commands\:
+			paths: [%appDir%/Commands]
+		App\Benchmarks\:
+			paths: [%appDir%/Benchmarks]
+		App\Services\:
+			paths: [%appDir%/Services]
+			excludes: [App\Services\Client]
+
+console:
+	name: MyMo
+	version: 0.0.1
+
+# ======================================
+# Services =============================
+services:
+	- App\Services\Client(%target%)

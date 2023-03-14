@@ -1,0 +1,42 @@
+version: "3.9"
+services:
+    client:
+        build: ../client/
+        image: mymo-client
+        container_name: mymo-client
+        volumes:
+            - ./../client/:/usr/src/mymo-client
+        depends_on:
+            - sut-mysql
+            - sut-mongo
+        environment:
+            NETTE_MYSQL_HOST: sut-mysql
+            NETTE_MYSQL_USER: user
+            NETTE_MYSQL_PASS: password
+            NETTE_MONGO_HOST: sut-mongo
+            NETTE_MONGO_USER: user
+            NETTE_MONGO_PASS: password
+
+    sut-mongo:
+        image: mongo:6.0
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: user
+            MONGO_INITDB_ROOT_PASSWORD: password
+        ports:
+            - "27017:27017"
+
+    sut-mysql:
+        image: mysql:8.0
+        restart: always
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_USER: user
+            MYSQL_ROOT_PASSWORD: password
+        command: [
+            "mysqld",
+            "--character-set-server=utf8mb4",
+            "--collation-server=utf8mb4_unicode_ci",
+            "--disabled-storage-engines=MEMORY,FEDERATED"
+        ]

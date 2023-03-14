@@ -1,0 +1,7 @@
+# Composer
+/vendor/*
+
+# Nette config
+/app/config/local.neon
+
+composer.phar
